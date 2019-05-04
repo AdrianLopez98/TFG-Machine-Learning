@@ -40,7 +40,7 @@ class CategoricalEncoder(BaseEstimator, TransformerMixin):
         is set to 'ignore' and an unknown category is encountered during
         transform, the resulting one-hot encoded columns for this feature
         will be all zeros.
-        Ignoring unknown categories is not supported for
+        Ignoring unknown categories is not supported  for
         ``encoding='ordinal'``.
     Attributes
     ----------

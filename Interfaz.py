@@ -1,6 +1,6 @@
 from tkinter import *
 import csv
-import RedNeuronal as RN
+
 
 
 def login():
@@ -52,5 +52,8 @@ login.place(x=200,y=200)
 register.place(x=250,y=200)
 imagenposi.place(x=100,y=300)
 pantalla.configure(width=900,height=700)
-pantalla.mainloop()
 
+def main():
+    pantalla.mainloop()
+
+main()
