@@ -6,9 +6,8 @@ import warnings
 import CategoricalEncoder
 import CombineAtributesAdder
 warnings.simplefilter(action='ignore', category=FutureWarning)
-
 casas=pd.read_csv("casas.csv")
-print(casas.head())
+#print(casas.head())
 
 #print(housing.info())
 #print(housing["ocean_proximity"].value_counts())
@@ -32,9 +31,9 @@ set_entreno, set_test = split_train_test_by_id(casas_con_id, 0.2, "index")
 casas_con_id["id"] = casas["longitude"] * 1000 + casas["latitude"] # creamos una columna llamada id a partir de la latitud y la longitud
 set_entreno, set_test = split_train_test_by_id(casas_con_id, 0.2, "id")
 
-print(len(set_entreno), "train +", len(set_test), "test")
+#print(len(set_entreno), "train +", len(set_test), "test")
 
-print(set_entreno.head())
+#print(set_entreno.head())
 
 casas["income_cat"]=np.ceil(casas["median_income"]/1.5) #con esto reducimos el numero de distritos de ganancias medias lo redondeo a la alta
 casas["income_cat"].where(casas["income_cat"]<5,5.0,inplace=True)#todos los distritos que no son menores que 5 los ponemos en 5.0
@@ -50,7 +49,7 @@ for entreno_index, test_index in split.split(casas,casas["income_cat"]): #genera
     strat_set_entreno=casas.loc[entreno_index]
     strat_set_test=casas.loc[test_index]
 
-print(strat_set_test["income_cat"].value_counts() / len(strat_set_test))
+#print(strat_set_test["income_cat"].value_counts() / len(strat_set_test))
 
 for set_ in (strat_set_entreno, strat_set_test):
     set_.drop("income_cat", axis=1, inplace=True)
@@ -77,7 +76,7 @@ cbar.ax.set_yticklabels(["$%dk"%(round(v/1000)) for v in tick_values], fontsize=
 #cbar.set_label('Valor Medio', fontsize=16)
 '''
 mtp.legend(fontsize=16)
-mtp.show()
+#mtp.show()
 casas = strat_set_entreno.drop("median_house_value", axis=1) # eliminamos la label objetivo  casas input etiquetas_casas output variable
 etiquetas_casas = strat_set_entreno["median_house_value"].copy() #es donde tengo los precios
 
@@ -104,21 +103,21 @@ casas_cat=casas["ocean_proximity"]
 #print(casas_cat.head)
 
 casas_cat_encoded, casas_categorias = casas_cat.factorize()
-print(casas_cat_encoded)
+#print(casas_cat_encoded)
 
 #es necesario convertir a one hot encoder para que el paso de la proximidad al oceano a numero no de valores falsos
 from sklearn.preprocessing import OneHotEncoder
-print("aqui")
+#print("aqui")
 encoder = OneHotEncoder()
 casas_cat_1hot = encoder.fit_transform(casas_cat_encoded.reshape(-1,1))
 casas_cat_1hot=casas_cat_1hot.toarray()
 
-print(casas_cat_1hot)
+#print(casas_cat_1hot)
 cat_encoder = CategoricalEncoder.CategoricalEncoder(encoding="onehot-dense")
 casas_cat_reshaped = casas_cat.values.reshape(-1, 1)
 casas_cat_1hot = cat_encoder.fit_transform(casas_cat_reshaped)
-print("el otro")
-print(casas_cat_1hot)
+#print("el otro")
+#print(casas_cat_1hot)
 #los algoritmos de ML no trabajan bien con valores muy dispares(alejados) por lo que tenemos que hacer algunas modificaciones(normalizar,escalar) num-min partido de max-min
 
 from sklearn.pipeline import Pipeline
@@ -162,8 +161,9 @@ lin_reg = LinearRegression()
 lin_reg.fit(casas_final, etiquetas_casas)#casas_final son los inputs y el output es etiquetsd_casas que tiene el valor de las casas es el output
 
 #prueba  siempre que queramos hacer una prediccion tenemos que pasar los datos por la pipe
-
-datos_random={"longitude":-212.0,"latitude":38.1,"housing_median_age":41.0,"total_rooms":880.0,"total_bedrooms":129.0,"population":322.0,"households":126.0,"median_income":8.3252,"ocean_proximity":"NEAR BAY"}
+#import InterfazDatos#
+#intr=InterfazDatos.InterfazDatos()#
+datos_random={"longitude":122,"latitude":38.1,"housing_median_age":41.0,"total_rooms":880.0,"total_bedrooms":129.0,"population":322.0,"households":126.0,"median_income":8.3252,"ocean_proximity":"NEAR BAY"}
 datos_random=pd.DataFrame(datos_random,index=[0])
 #datos_random=casas.iloc[:1]
 etiquetas_random=etiquetas_casas.iloc[:1]
@@ -191,8 +191,11 @@ tree_reg.fit(casas_final, etiquetas_casas)
 predicciones = tree_reg.predict(casas_final)
 tree_mse = mean_squared_error(etiquetas_casas, predicciones)
 tree_rmse = np.sqrt(tree_mse)
-print(tree_rmse)
-print("Predictions:", tree_reg.predict(datos_preparados))
-print("Actual values",list(etiquetas_random))
-print(datos_random)
-print(datos_preparados)
+#print(tree_rmse)
+#print("Predictions:", tree_reg.predict(datos_preparados))
+#print("Actual values",list(etiquetas_random))
+#print(datos_random)
+#print(datos_preparados)
+
+def predice():#
+    return tree_reg.predict(datos_preparados)#
