@@ -1,13 +1,9 @@
 from tkinter import *
-import RedNeuronal
 
 def prepa():
 
-
-    dato = RedNeuronal.predice()
-
-    Tprecio.insert(0, dato)
-    print("patata")
+    import RedNeuronal
+    rn=RedNeuronal
 
 
 pantalla2=Tk()
@@ -20,7 +16,6 @@ media_años=Label(pantalla2,text="Antigüedad")
 habitaciones=Label(pantalla2,text="Habitaciones")
 baños=Label(pantalla2,text="Baños")
 poblacion=Label(pantalla2,text="Población")
-habitaciones=Label(pantalla2,text="Habitaciones")
 metros=Label(pantalla2,text="Metros cuadrados")
 salario=Label(pantalla2,text="Salario medio")
 precio=Label(pantalla2,text="Precio")
@@ -34,7 +29,6 @@ Tmedia_años=Entry(pantalla2)
 Thabitaciones=Entry(pantalla2)
 Tbaños=Entry(pantalla2)
 Tpoblacion=Entry(pantalla2)
-Thabitaciones=Entry(pantalla2)
 Tmetros=Entry(pantalla2)
 Tsalario=Entry(pantalla2)
 Tprecio=Entry(pantalla2)
@@ -54,13 +48,11 @@ media_años.place(x=50, y=150)
 habitaciones.place(x=50, y=200)
 Tmedia_años.place(x=200, y=150)
 Thabitaciones.place(x=200, y=200)
-baños.place(x=50, y=200)
-poblacion.place(x=50, y=250)
-Tbaños.place(x=200, y=200)
-Tpoblacion.place(x=200, y=250)
-habitaciones.place(x=50, y=300)
+baños.place(x=50, y=250)
+poblacion.place(x=50, y=300)
+Tbaños.place(x=200, y=250)
+Tpoblacion.place(x=200, y=300)
 metros.place(x=50, y=350)
-Thabitaciones.place(x=200, y=300)
 Tmetros.place(x=200, y=350)
 salario.place(x=50, y=400)
 Tsalario.place(x=200, y=400)

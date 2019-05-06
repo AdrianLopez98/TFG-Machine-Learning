@@ -161,9 +161,11 @@ lin_reg = LinearRegression()
 lin_reg.fit(casas_final, etiquetas_casas)#casas_final son los inputs y el output es etiquetsd_casas que tiene el valor de las casas es el output
 
 #prueba  siempre que queramos hacer una prediccion tenemos que pasar los datos por la pipe
-#import InterfazDatos#
-#intr=InterfazDatos.InterfazDatos()#
-datos_random={"longitude":122,"latitude":38.1,"housing_median_age":41.0,"total_rooms":880.0,"total_bedrooms":129.0,"population":322.0,"households":126.0,"median_income":8.3252,"ocean_proximity":"NEAR BAY"}
+import InterfazDatos#
+intr=InterfazDatos#
+datos_random = {"longitude": float(intr.Tlongitud.get()), "latitude": float(intr.Tlatitud.get()), "housing_median_age": float(intr.Tmedia_años.get()), "total_rooms": float(intr.Thabitaciones.get()),
+                    "total_bedrooms": float(intr.Tbaños.get()), "population": float(intr.Tpoblacion.get()), "households": float(intr.Tmetros.get()), "median_income": float(intr.Tsalario.get()),
+                    "ocean_proximity": intr.var.get()}
 datos_random=pd.DataFrame(datos_random,index=[0])
 #datos_random=casas.iloc[:1]
 etiquetas_random=etiquetas_casas.iloc[:1]
@@ -188,14 +190,9 @@ from sklearn.tree import DecisionTreeRegressor
 tree_reg = DecisionTreeRegressor(random_state=42)
 tree_reg.fit(casas_final, etiquetas_casas)
 
-predicciones = tree_reg.predict(casas_final)
-tree_mse = mean_squared_error(etiquetas_casas, predicciones)
-tree_rmse = np.sqrt(tree_mse)
+
 #print(tree_rmse)
-#print("Predictions:", tree_reg.predict(datos_preparados))
+intr.Tprecio.insert(0,tree_reg.predict(datos_preparados))
 #print("Actual values",list(etiquetas_random))
 #print(datos_random)
 #print(datos_preparados)
-
-def predice():#
-    return tree_reg.predict(datos_preparados)#
