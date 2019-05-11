@@ -76,7 +76,8 @@ cbar.ax.set_yticklabels(["$%dk"%(round(v/1000)) for v in tick_values], fontsize=
 #cbar.set_label('Valor Medio', fontsize=16)
 '''
 mtp.legend(fontsize=16)
-#mtp.show()
+def mostrar():
+    mtp.show()
 casas = strat_set_entreno.drop("median_house_value", axis=1) # eliminamos la label objetivo  casas input etiquetas_casas output variable
 etiquetas_casas = strat_set_entreno["median_house_value"].copy() #es donde tengo los precios
 
@@ -162,14 +163,7 @@ lin_reg.fit(casas_final, etiquetas_casas)#casas_final son los inputs y el output
 
 #prueba  siempre que queramos hacer una prediccion tenemos que pasar los datos por la pipe
 import InterfazDatos#
-intr=InterfazDatos#
-datos_random = {"longitude": float(intr.Tlongitud.get()), "latitude": float(intr.Tlatitud.get()), "housing_median_age": float(intr.Tmedia_años.get()), "total_rooms": float(intr.Thabitaciones.get()),
-                    "total_bedrooms": float(intr.Tbaños.get()), "population": float(intr.Tpoblacion.get()), "households": float(intr.Tmetros.get()), "median_income": float(intr.Tsalario.get()),
-                    "ocean_proximity": intr.var.get()}
-datos_random=pd.DataFrame(datos_random,index=[0])
-#datos_random=casas.iloc[:1]
-etiquetas_random=etiquetas_casas.iloc[:1]
-datos_preparados=full_pipeline.transform(datos_random)
+
 
 #print("Predictions:", lin_reg.predict(datos_preparados))
 #print("Actual values",list(etiquetas_random))
@@ -185,14 +179,23 @@ lin_rmse = np.sqrt(lin_mse)
 
 #modelo treeregresion
 
-from sklearn.tree import DecisionTreeRegressor
-
-tree_reg = DecisionTreeRegressor(random_state=42)
-tree_reg.fit(casas_final, etiquetas_casas)
 
 
+def escribir():
 #print(tree_rmse)
-intr.Tprecio.insert(0,tree_reg.predict(datos_preparados))
+    intr=InterfazDatos#
+    datos_random = {"longitude": float(intr.Tlongitud.get()), "latitude": float(intr.Tlatitud.get()), "housing_median_age": float(intr.Tmedia_años.get()), "total_rooms": float(intr.Thabitaciones.get()),
+                    "total_bedrooms": float(intr.Tbaños.get()), "population": float(intr.Tpoblacion.get()), "households": float(intr.Tmetros.get()), "median_income": float(intr.Tsalario.get()),
+                    "ocean_proximity": intr.var.get()}
+    datos_random=pd.DataFrame(datos_random,index=[0])
+#datos_random=casas.iloc[:1]
+    etiquetas_random=etiquetas_casas.iloc[:1]
+    datos_preparados=full_pipeline.transform(datos_random)
+    from sklearn.tree import DecisionTreeRegressor
+
+    tree_reg = DecisionTreeRegressor(random_state=42)
+    tree_reg.fit(casas_final, etiquetas_casas)
+    intr.Tprecio.insert(0,tree_reg.predict(datos_preparados))
 #print("Actual values",list(etiquetas_random))
 #print(datos_random)
 #print(datos_preparados)

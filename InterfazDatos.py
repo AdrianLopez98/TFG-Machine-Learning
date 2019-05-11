@@ -4,6 +4,29 @@ def prepa():
 
     import RedNeuronal
     rn=RedNeuronal
+    rn.escribir()
+
+
+
+def reset():
+
+
+
+    Tprecio.delete(0,len(Tprecio.get()))
+    Tlongitud.delete(0,len(Tlongitud.get()))
+    Tlatitud.delete(0,len(Tlatitud.get()))
+    Tmedia_años.delete(0,len(Tmedia_años.get()))
+    Tsalario.delete(0,len(Tsalario.get()))
+    Thabitaciones.delete(0,len(Thabitaciones.get()))
+    Tbaños.delete(0,len(Tbaños.get()))
+    Tpoblacion.delete(0,len(Tpoblacion.get()))
+    Tmetros.delete(0,len(Tmetros.get()))
+
+
+def mostrarr():
+    import RedNeuronal
+    rn = RedNeuronal
+    rn.mostrar()
 
 
 pantalla2=Tk()
@@ -40,6 +63,11 @@ Cproximidad=OptionMenu(pantalla2,var,*lista)
 
 Bboton=Button(pantalla2,text="Hacer prediccion",command=prepa)
 
+BbotonReset=Button(pantalla2,text="Resetear",command=reset)
+
+BbotonMapa=Button(pantalla2,text="Mapa",command=mostrarr)
+
+
 longitud.place(x=50, y=50)
 latitud.place(x=50, y=100)
 Tlongitud.place(x=200, y=50)
@@ -60,6 +88,9 @@ proximidad.place(x=50,y=450)
 Cproximidad.place(x=200,y=450)
 
 Bboton.place(x=100,y=550)
+BbotonReset.place(x=100,y=600)
+
+BbotonMapa.place(x=100,y=650)
 
 precio.place(x=350, y=550)
 Tprecio.place(x=400, y=550)

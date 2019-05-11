@@ -9,14 +9,16 @@ def login():
     resultado=cursor.fetchall()
 
     for usuario in resultado:
+        try:
+            if nombre2.get() and password2.get() in usuario:
+                pantalla.quit()
+                pantalla.destroy()
+                import InterfazDatos
+        except:
+            print("Cerrando sesión")
 
-        if nombre2.get() and password2.get() in usuario:
-            import InterfazDatos
 
 
-
-
-    print(resultado)
 
     cursor.close()
     db.close()
