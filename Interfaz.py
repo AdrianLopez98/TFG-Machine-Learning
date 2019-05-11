@@ -8,17 +8,19 @@ def login():
     cursor.execute("select * from usuarios")
     resultado=cursor.fetchall()
 
+    esta=False
     for usuario in resultado:
-        try:
-            if nombre2.get() and password2.get() in usuario:
-                pantalla.quit()
-                pantalla.destroy()
-                import InterfazDatos
-        except:
-            print("Cerrando sesión")
+
+        if (nombre2.get(),password2.get())==usuario:
+            esta=True
 
 
-
+    if esta==True:
+        pantalla.quit()
+        pantalla.destroy()
+        import InterfazDatos
+    else:
+        print("Date de alta")
 
     cursor.close()
     db.close()
