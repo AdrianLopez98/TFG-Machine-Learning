@@ -5,15 +5,10 @@ import hashlib
 import warnings
 import CategoricalEncoder
 import CombineAtributesAdder
+
 warnings.simplefilter(action='ignore', category=FutureWarning)
 casas=pd.read_csv("casas.csv")
-#print(casas.head())
 
-#print(housing.info())
-#print(housing["ocean_proximity"].value_counts())
-
-#casas["longitude"].hist(bins=50,figsize=(20,20))
-#  mtp.show()
 
 def test_set_check(id, test_ratio, hash):
 
@@ -25,20 +20,16 @@ def split_train_test_by_id(datos, test_ratio, id_column, hash=hashlib.md5):
     in_test_set = ids.apply(lambda id_: test_set_check(id_, test_ratio, hash))#aplicamos con lambda la funcion que nos devuelve true o false y guardamos los return en una variable
     return datos.loc[~in_test_set], datos.loc[in_test_set]#devuelvo los que son true y los que son false para guardaarlos en sets distintos
 
-casas_con_id = casas.reset_index()   # adds an `index` column
+casas_con_id = casas.reset_index()   # añade la columna index
 set_entreno, set_test = split_train_test_by_id(casas_con_id, 0.2, "index")
 
 casas_con_id["id"] = casas["longitude"] * 1000 + casas["latitude"] # creamos una columna llamada id a partir de la latitud y la longitud
 set_entreno, set_test = split_train_test_by_id(casas_con_id, 0.2, "id")
 
-#print(len(set_entreno), "train +", len(set_test), "test")
-
-#print(set_entreno.head())
-
 casas["income_cat"]=np.ceil(casas["median_income"]/1.5) #con esto reducimos el numero de distritos de ganancias medias lo redondeo a la alta
 casas["income_cat"].where(casas["income_cat"]<5,5.0,inplace=True)#todos los distritos que no son menores que 5 los ponemos en 5.0
 
-casas
+
 #vamos a crear los samplings usando sklearn
 
 from sklearn.model_selection import StratifiedShuffleSplit
@@ -58,23 +49,18 @@ casas = strat_set_entreno.copy()
 
 
 import matplotlib.image as mpimg
+
 california_img=mpimg.imread('Imagenes/california.png')#leemos la imagen
-#grafica de dispersion con la imagen de california cuadrada de fondo, alpha es la transparencia
+#grafica de dispersion con la imagen de california cuadrada de fondo,
 ax = casas.plot(kind="scatter", x="longitude", y="latitude", figsize=(10,7),
                        s=casas['population']/100, label="Población",
                        c="median_house_value", cmap=mtp.get_cmap("jet"),#jet es el rango de colores
-                       colorbar=True, alpha=0.4,
+                       colorbar=True, alpha=0.4,#alpha es la transparencia
                       )
 mtp.imshow(california_img, extent=[-124.55, -113.80, 32.45, 42.05], alpha=0.5)
 mtp.ylabel("Latitud", fontsize=14,labelpad=15)
 mtp.xlabel("Longitud", fontsize=14,labelpad=15)
-'''
-precios = casas["median_house_value"]
-tick_values = np.linspace(precios.min(), precios.max(), 11)
-cbar = mtp.colorbar()
-cbar.ax.set_yticklabels(["$%dk"%(round(v/1000)) for v in tick_values], fontsize=14)
-#cbar.set_label('Valor Medio', fontsize=16)
-'''
+
 mtp.legend(fontsize=16)
 def mostrar():
     mtp.show()
@@ -82,7 +68,7 @@ casas = strat_set_entreno.drop("median_house_value", axis=1) # eliminamos la lab
 etiquetas_casas = strat_set_entreno["median_house_value"].copy() #es donde tengo los precios
 
 #vamos a limpiar los datos vacios, total_bedrooms tiene espacios con null
-#los rellenamos con datos medios ya que las podriamos eliminar pero perderiamos bastantes datos que si tiene
+#los rellenamos con datos medios ya que las podriamos eliminar pero perderiamos bastantes datos
 
 from sklearn.impute import SimpleImputer
 
@@ -182,20 +168,23 @@ lin_rmse = np.sqrt(lin_mse)
 
 
 def escribir():
-#print(tree_rmse)
-    intr=InterfazDatos#
-    datos_random = {"longitude": float(intr.Tlongitud.get()), "latitude": float(intr.Tlatitud.get()), "housing_median_age": float(intr.Tmedia_años.get()), "total_rooms": float(intr.Thabitaciones.get()),
-                    "total_bedrooms": float(intr.Tbaños.get()), "population": float(intr.Tpoblacion.get()), "households": float(intr.Tmetros.get()), "median_income": float(intr.Tsalario.get()),
-                    "ocean_proximity": intr.var.get()}
-    datos_random=pd.DataFrame(datos_random,index=[0])
-#datos_random=casas.iloc[:1]
-    etiquetas_random=etiquetas_casas.iloc[:1]
-    datos_preparados=full_pipeline.transform(datos_random)
-    from sklearn.tree import DecisionTreeRegressor
 
-    tree_reg = DecisionTreeRegressor(random_state=42)
-    tree_reg.fit(casas_final, etiquetas_casas)
-    intr.Tprecio.insert(0,tree_reg.predict(datos_preparados))
-#print("Actual values",list(etiquetas_random))
-#print(datos_random)
-#print(datos_preparados)
+    intr=InterfazDatos#
+    try:
+        datos_random = {"longitude": float(intr.Tlongitud.get()), "latitude": float(intr.Tlatitud.get()), "housing_median_age": float(intr.Tmedia_años.get()), "total_rooms": float(intr.Thabitaciones.get()),
+                    "total_bedrooms": float(intr.Tbaños.get()), "population": 1000.0, "households": float(intr.Tmetros.get()), "median_income": float(intr.Tsalario.get()),
+                    "ocean_proximity": intr.var.get()}
+        datos_random=pd.DataFrame(datos_random,index=[0])
+
+        etiquetas_random=etiquetas_casas.iloc[:1]
+        datos_preparados=full_pipeline.transform(datos_random)
+        from sklearn.tree import DecisionTreeRegressor
+
+        tree_reg = DecisionTreeRegressor(random_state=42)
+        tree_reg.fit(casas_final, etiquetas_casas)
+        datoFinal=tree_reg.predict(datos_preparados)
+        datoFinal=str(datoFinal).replace("[","").replace("]","").replace(".","")
+        intr.Tprecio.insert(0,datoFinal)
+    except:
+        from tkinter import messagebox
+        messagebox.showerror("Error de tipo", "Ha introducido algún tipo de dato erróneo")

@@ -20,7 +20,8 @@ def login():
         pantalla.destroy()
         import InterfazDatos
     else:
-        print("Date de alta")
+        from tkinter import messagebox
+        messagebox.showwarning("Error", "Necesita registrarse en la base de datos")
 
     cursor.close()
     db.close()
@@ -46,8 +47,8 @@ def register():
         cursor2.execute('insert into usuarios values("%s", "%s")' % \
                         (nom, pas))
         db.commit()
-        print("insert hecho")
-    print(resultado)
+        from tkinter import messagebox
+        messagebox.showinfo("Registrado con éxito", "Se ha registrado satisfactoriamente en la base de datos")
     cursor2.close()
     db.close()
 
@@ -56,10 +57,12 @@ def register():
 
 
 pantalla=Tk()
-pantalla.title("Login")
+pantalla.title("House price prediction for California")
 
 nombre=Label(pantalla,text="Nombre")
 password=Label(pantalla,text="Contraseña")
+leyenda=Label(pantalla,text="Usted va a trabajar con los datos de California")
+
 
 nombre2=Entry(pantalla)
 password2=Entry(pantalla,show="*",relief="sunken")
@@ -77,7 +80,8 @@ password2.place(x=200, y=100)
 login.place(x=200,y=200)
 register.place(x=250,y=200)
 imagenposi.place(x=100,y=300)
-pantalla.configure(width=900,height=700)
+leyenda.place(x=140,y=550)
+pantalla.geometry("500x650-700-250")
 pantalla.mainloop()
 
 
